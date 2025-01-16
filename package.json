@@ -1,6 +1,6 @@
 {
   "name": "@jimbali/sudoku-api-contract",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "API contract and validation schemas for my sudoku app API",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TallySchema } from "./tally.schema";
+import { UserSchema } from "./user.schema";
 
 export const PuzzleSchema = z.object({
   id: z.string().nullable().optional(),
@@ -10,4 +11,5 @@ export const PuzzleSchema = z.object({
   intendedDifficulty: z.number().nullable().optional(),
   givens: z.number().nullable().optional(),
   calculatedDifficulty: z.string().nullable().optional(),
+  creator: UserSchema.nullable().optional(),
 });
