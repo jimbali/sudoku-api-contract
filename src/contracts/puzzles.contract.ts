@@ -8,6 +8,10 @@ export const puzzlesContract = c.router({
   getPuzzles: {
     method: 'GET',
     path: '/puzzles',
+    query: z.object({
+      take: z.string().transform(Number).optional(),
+      skip: z.string().transform(Number).optional(),
+    }),
     responses: {
       200: z.array(PuzzleSchema),
       404: z.object({ error: z.string() }),
