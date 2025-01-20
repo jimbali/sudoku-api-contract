@@ -5,10 +5,17 @@ import { PuzzleSchema } from '../zod/puzzle.schema';
 const c = initContract();
 
 const PuzzleOrderBy = z.object({
-  givens: z.enum(['asc', 'desc']),
-  createdAt: z.enum(['asc', 'desc']),
-  updatedAt: z.enum(['asc', 'desc']),
+  givens: z.enum(['asc', 'desc']).optional(),
+  createdAt: z.enum(['asc', 'desc']).optional(),
+  updatedAt: z.enum(['asc', 'desc']).optional(),
 })
+
+const PuzzleWhereClause = z.object({
+  creatorId: z.string().optional(),
+  calculatedDifficulty: z.object({
+    in: z.array(z.enum(['Easy', 'Medium', 'Hard']))
+  }).optional(),
+}).optional()
 
 export const puzzlesContract = c.router({
   getPuzzles: {
@@ -17,12 +24,7 @@ export const puzzlesContract = c.router({
     query: z.object({
       take: z.string().transform(Number).optional(),
       skip: z.string().transform(Number).optional(),
-      where: z.object({
-        creatorId: z.string().optional(),
-        calculatedDifficulty: z.object({
-          in: z.array(z.enum(['Easy', 'Medium', 'Hard']))
-        }).optional(),
-      }).optional(),
+      where: PuzzleWhereClause,
       orderBy: z.union([
         PuzzleOrderBy,
         z.array(PuzzleOrderBy),
@@ -30,7 +32,6 @@ export const puzzlesContract = c.router({
     }),
     responses: {
       200: z.array(PuzzleSchema),
-      404: z.object({ error: z.string() }),
       500: z.object({ error: z.string() }),
     },
   },
@@ -40,6 +41,19 @@ export const puzzlesContract = c.router({
     responses: {
       200: PuzzleSchema,
       404: z.object({ error: z.string() }),
+      500: z.object({ error: z.string() }),
+    },
+  },
+  getRandomPuzzle: {
+    method: 'GET',
+    path: '/puzzles/random',
+    query: z.object({
+      where: PuzzleWhereClause,
+    }),
+    responses: {
+      200: PuzzleSchema,
+      404: z.object({ error: z.string() }),
+      500: z.object({ error: z.string() }),
     },
   },
   createPuzzle: {
