@@ -4,6 +4,12 @@ import { PuzzleSchema } from '../zod/puzzle.schema';
 
 const c = initContract();
 
+const PuzzleOrderBy = z.object({
+  givens: z.enum(['asc', 'desc']),
+  createdAt: z.enum(['asc', 'desc']),
+  updatedAt: z.enum(['asc', 'desc']),
+})
+
 export const puzzlesContract = c.router({
   getPuzzles: {
     method: 'GET',
@@ -11,6 +17,16 @@ export const puzzlesContract = c.router({
     query: z.object({
       take: z.string().transform(Number).optional(),
       skip: z.string().transform(Number).optional(),
+      where: z.object({
+        creatorId: z.string().optional(),
+        calculatedDifficulty: z.object({
+          in: z.array(z.enum(['Easy', 'Medium', 'Hard']))
+        }).optional(),
+      }).optional(),
+      orderBy: z.union([
+        PuzzleOrderBy,
+        z.array(PuzzleOrderBy),
+      ]).optional(),
     }),
     responses: {
       200: z.array(PuzzleSchema),
@@ -29,7 +45,7 @@ export const puzzlesContract = c.router({
   createPuzzle: {
     method: 'POST',
     path: '/puzzles',
-    body: PuzzleSchema,
+    body: PuzzleSchema.omit({ createdAt: true, updatedAt: true }),
     responses: {
       201: PuzzleSchema,
       500: z.object({ error: z.string() }),
@@ -38,7 +54,7 @@ export const puzzlesContract = c.router({
   updatePuzzle: {
     method: 'PUT',
     path: '/puzzles/:id',
-    body: PuzzleSchema,
+    body: PuzzleSchema.omit({ createdAt: true, updatedAt: true }),
     responses: {
       200: PuzzleSchema,
       404: z.object({ error: z.string() }),
