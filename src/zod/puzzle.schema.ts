@@ -15,3 +15,10 @@ export const PuzzleSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
+export const PuzzleResult =
+  PuzzleSchema
+    .omit({ creator: true })
+    .extend({
+      creator: UserSchema.pick({ id: true, displayName: true })
+    })
