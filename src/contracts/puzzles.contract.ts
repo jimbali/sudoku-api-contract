@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { PuzzleSchema } from '../zod/puzzle.schema';
+import { PuzzleResult, PuzzleSchema } from '../zod/puzzle.schema';
 
 const c = initContract();
 
@@ -31,7 +31,7 @@ export const puzzlesContract = c.router({
       ]).optional(),
     }),
     responses: {
-      200: z.array(PuzzleSchema),
+      200: z.array(PuzzleResult),
       500: z.object({ error: z.string() }),
     },
   },
@@ -39,7 +39,7 @@ export const puzzlesContract = c.router({
     method: 'GET',
     path: '/puzzles/:id',
     responses: {
-      200: PuzzleSchema,
+      200: PuzzleResult,
       404: z.object({ error: z.string() }),
       500: z.object({ error: z.string() }),
     },
@@ -51,7 +51,7 @@ export const puzzlesContract = c.router({
       where: PuzzleWhereClause,
     }),
     responses: {
-      200: PuzzleSchema,
+      200: PuzzleResult,
       404: z.object({ error: z.string() }),
       500: z.object({ error: z.string() }),
     },
@@ -61,7 +61,7 @@ export const puzzlesContract = c.router({
     path: '/puzzles',
     body: PuzzleSchema.omit({ createdAt: true, updatedAt: true }),
     responses: {
-      201: PuzzleSchema,
+      201: PuzzleResult,
       500: z.object({ error: z.string() }),
     },
   },
@@ -70,7 +70,7 @@ export const puzzlesContract = c.router({
     path: '/puzzles/:id',
     body: PuzzleSchema.omit({ createdAt: true, updatedAt: true }),
     responses: {
-      200: PuzzleSchema,
+      200: PuzzleResult,
       404: z.object({ error: z.string() }),
       500: z.object({ error: z.string() }),
     },
