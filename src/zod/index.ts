@@ -1,8 +1,3 @@
-import { PuzzleResult, PuzzleSchema } from "./puzzle.schema";
-import { TallySchema } from "./tally.schema";
-
-export {
-  PuzzleResult,
-  PuzzleSchema,
-  TallySchema,
-}
+export * from './puzzle.schema';
+export * from './solveAttempt.schema';
+export * from './tally.schema';
