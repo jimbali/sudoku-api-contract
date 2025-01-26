@@ -12,8 +12,8 @@ export const PuzzleSchema = z.object({
   givens: z.number().nullable().optional(),
   calculatedDifficulty: z.string().nullable().optional(),
   creator: UserSchema.nullable().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.date().nullable().optional(),
+  updatedAt: z.date().nullable().optional(),
 });
 
 export const PuzzleResult =
